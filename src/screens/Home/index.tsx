@@ -10,12 +10,16 @@ export interface TaskInterface {
   checked: boolean,
 }
 
-export function Home(){
+export function Home() {
   const [tasks, setTasks] = useState<TaskInterface[]>([])
   const [newTask, setNewTask] = useState('')
   let checkedTasks = tasks.filter(tasks => tasks.checked === true).length
 
-  function handleTodoAdd(){
+  function handleTodoAdd() {
+    if (!newTask) {
+       Alert.alert('Valor não foi informado.', 'O texto da nova tarefa precisa ser informada.')
+      return
+    } 
     const taskWithSameName = tasks.find((task) => task.name === newTask)
     if (taskWithSameName) {
       Alert.alert('Tarefa já existe', 'Já existe uma tarefa dessa criada')
@@ -25,8 +29,16 @@ export function Home(){
     setNewTask('')
   }
 
-  function handleTodoRemove(name: string){
-    setTasks(prevState => prevState.filter((item)=> item.name !== name))
+  function handleTodoRemove(name: string) {
+    Alert.alert(
+        'Tem certeza que quer remover?',
+        '',
+        [
+          { text: 'Não', onPress: () => {}},
+          { text: 'Sim', onPress: () => setTasks(prevState => prevState.filter((item)=> item.name !== name)) },
+        ],
+        { cancelable: true },
+    );
   }
 
   function handleTodoCheck(task: TaskInterface){
